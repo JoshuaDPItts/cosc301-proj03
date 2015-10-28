@@ -14,6 +14,8 @@
 // to a saved program counter, and then the first argument.
 
 // Fetch the int at addr from the current process.
+
+//LOOK INTO THIS 
 int
 fetchint(uint addr, int *ip)
 {
@@ -26,6 +28,8 @@ fetchint(uint addr, int *ip)
 // Fetch the nul-terminated string at addr from the current process.
 // Doesn't actually copy the string - just sets *pp to point at it.
 // Returns length of string, not including nul.
+
+//LOOK INTO THIS AS WELL 
 int
 fetchstr(uint addr, char **pp)
 {

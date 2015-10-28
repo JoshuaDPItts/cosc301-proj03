@@ -19,13 +19,22 @@ int ppid;
    exit(); \
 }
 
-int mprotect(void *addr, int len) {
+/*int mprotect(void *addr, int len) {
+	if ((int)addr%PGSIZE != 0 || (int)addr > proc->sz) {
+		return -1; 
+	}
+	if (len <= 0 || len > (int)addr) {
+		return -1; 
+	}
 	return 0;
 }
 
 int munprotect(void *addr, int len) {
+	if ((int)addr%PGSIZE != 0 || (int)addr > proc->sz) {
+		return -1; 
+	}
 	return 0; 
-}
+} */ 
 
 
 int
