@@ -34,7 +34,6 @@ int
 fetchstr(uint addr, char **pp)
 {
   char *s, *ep;
-
   if(addr >= proc->sz)
     return -1;
   *pp = (char*)addr;
