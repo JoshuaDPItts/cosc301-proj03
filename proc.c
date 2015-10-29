@@ -468,8 +468,10 @@ procdump(void)
 }
 
 int kern_mprotect(void *addr, int len) {
+	return 0;
 }
 
 int kern_munprotect(void *addr, int len) {
+	return 0;
 }
 
