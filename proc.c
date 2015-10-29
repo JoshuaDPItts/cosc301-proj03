@@ -466,3 +466,10 @@ procdump(void)
     cprintf("\n");
   }
 }
+
+int kern_mprotect(void *addr, int len) {
+}
+
+int kern_munprotect(void *addr, int len) {
+}
+
