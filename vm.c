@@ -323,6 +323,7 @@ copyuvm(pde_t *pgdir, uint sz)
       panic("copyuvm: page not present");
     pa = PTE_ADDR(*pte);
     flags = PTE_FLAGS(*pte);
+	
     if((mem = kalloc()) == 0)
       goto bad;
     memmove(mem, (char*)p2v(pa), PGSIZE);
@@ -385,9 +386,10 @@ void do_mprotect(struct proc *p) {
         if ((pte = walkpgdir(pde, (void*)vpn, 0)) == 0) {
             cprintf("VPN %x is not mapped\n", vpn);
         } else {
-            uint pfn = PTE_ADDR(*pte);
-			if ((*pte)&PTE_W & 1) {
-				(~(*pte)&PTE_W); 
+            //uint pfn = PTE_ADDR(*pte);
+			if ((*pte)&PTE_W) {
+				*pte = (*pte)&(~PTE_W); 
+				lcr3(v2p(proc->pgdir));
 			}
         }
     }
@@ -401,9 +403,10 @@ void do_munprotect(struct proc *p) {
         if ((pte = walkpgdir(pde, (void*)vpn, 0)) == 0) {
             cprintf("VPN %x is not mapped\n", vpn);
         } else {
-            uint pfn = PTE_ADDR(*pte);
-			if ((*pte)&PTE_W & 0) {
-				(~(*pte)&PTE_W); 
+            //uint pfn = PTE_ADDR(*pte);
+			if (!((*pte)&PTE_W)) {
+				*pte = (*pte)|PTE_W; 
+				lcr3(v2p(proc->pgdir));
 			}
         }
     }

@@ -468,22 +468,44 @@ procdump(void)
 }
 
 int kern_mprotect(void *addr, int len) {
-	if ((int)addr%PGSIZE != 0 || ) {
+	if ((int)addr%PGSIZE != 0 || (int)addr > proc->sz) {
 		return -1; 
 	}
 	if (len <= 0 || len > proc->sz) {
 		return -1; 
 	}
+	int pid = proc->pid;
+	int rv = -1;
+    acquire(&ptable.lock);
+    if (pid < 0 || pid >= NPROC) {
+      release(&ptable.lock);
+      return rv;
+    }
+	do_mprotect(proc); 
+    release(&ptable.lock);
+    return rv;
+
 	return 0;
 }
 
 int kern_munprotect(void *addr, int len) {
-	if ((int)addr%PGSIZE != 0) {
+	if ((int)addr%PGSIZE != 0 || (int)addr > proc->sz) {
 		return -1; 
 	}
 	if (len <= 0 || len > proc->sz) {
 		return -1; 
 	}
+	int pid = proc->pid; 
+	int rv = -1;
+    acquire(&ptable.lock);
+    if (pid < 0 || pid >= NPROC) {
+      release(&ptable.lock);
+      return rv;
+    }
+	do_munprotect(proc); 
+    release(&ptable.lock);
+    return rv;
+
 	return 0;
 }
 

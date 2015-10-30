@@ -91,27 +91,27 @@ sys_uptime(void)
 }
 
 int sys_mprotect(void) {
-	void *addr; 	
+	int addr; 	
 	int len;
-	if (argint(0, addr) < 0) {
+	if (argint(0, &addr) < 0) {
 		return -1;
 	}
 	addr = proc->sz; 
 	if (argint(0, &len) < 0) {
 		return -1; 
 	}
-	return kern_mprotect(addr, len);
+	return kern_mprotect((void *)addr, len);
 }
 
 int sys_munprotect(void) {
-	void *addr; 	
+	int addr; 	
 	int len;
-	if (argint(0, addr) < 0) {
+	if (argint(0, &addr) < 0) {
 		return -1;
 	}
 	addr = proc->sz; 
 	if (argint(0, &len) < 0) {
 		return -1; 
 	}
-	return kern_munprotect(addr, len);
+	return kern_munprotect((void *)addr, len);
 }
