@@ -468,44 +468,51 @@ procdump(void)
 }
 
 int kern_mprotect(void *addr, int len) {
-	if ((int)addr%PGSIZE != 0 || (int)addr > proc->sz) {
-		return -1; 
-	}
-	if (len <= 0 || len > proc->sz) {
-		return -1; 
-	}
-	int pid = proc->pid;
+	//int pid = proc->pid;
 	int rv = -1;
-    acquire(&ptable.lock);
-    if (pid < 0 || pid >= NPROC) {
+	if ((int)addr%PGSIZE != 0 || (int)addr > proc->sz || (int)addr <= 0) {
+		cprintf("If this prints, something's wrong with addr!\n"); 
+		return rv; 
+	}
+	if (len <= 0 || ((int)addr + (len * PGSIZE)) > proc->sz) {
+		cprintf("If this prints, something's wrong with len!\n"); 
+		cprintf("Len is %d, addr+len is %d, proc size is %d\n", len, (int)addr+(len*PGSIZE), proc->sz); 
+		return rv; 
+	}
+    /*acquire(&ptable.lock);
+    if (pid <= 1 || pid >= NPROC) {
+	  cprintf("If this prints, something's wrong with pid!\n"); 
       release(&ptable.lock);
       return rv;
-    }
-	do_mprotect(proc); 
-    release(&ptable.lock);
+    }*/
+	do_mprotect(proc, addr, len); 
+	cprintf("rv is: %d\n", rv); 
+	rv = 0;
+    //release(&ptable.lock);
     return rv;
-
-	return 0;
 }
 
 int kern_munprotect(void *addr, int len) {
-	if ((int)addr%PGSIZE != 0 || (int)addr > proc->sz) {
-		return -1; 
-	}
-	if (len <= 0 || len > proc->sz) {
-		return -1; 
-	}
-	int pid = proc->pid; 
+	//int pid = proc->pid; 
 	int rv = -1;
-    acquire(&ptable.lock);
-    if (pid < 0 || pid >= NPROC) {
+	if ((int)addr%PGSIZE != 0 || (int)addr > proc->sz || (int)addr <= 0) {
+		cprintf("If this prints, something's wrong with addr!\n"); 
+		return rv; 
+	}
+	if (len <= 0 || ((int)addr + (len*PGSIZE)) > proc->sz) {
+		cprintf("If this prints, something's wrong with len!\n");
+		return rv; 
+	}
+    /*acquire(&ptable.lock);
+    if (pid <= 1 || pid >= NPROC) {
       release(&ptable.lock);
       return rv;
-    }
-	do_munprotect(proc); 
-    release(&ptable.lock);
+    }*/
+	do_munprotect(proc, addr, len); 
+	cprintf("rv is: %d\n", rv); 
+	//cprintf("rv is: %d\n", rv); 
+	rv = 0;
+    //release(&ptable.lock);
     return rv;
-
-	return 0;
 }
 

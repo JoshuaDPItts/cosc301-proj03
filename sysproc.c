@@ -96,10 +96,13 @@ int sys_mprotect(void) {
 	if (argint(0, &addr) < 0) {
 		return -1;
 	}
-	addr = proc->sz; 
-	if (argint(0, &len) < 0) {
+	//if (argptr(0, (char **) &addr, 4) < 0) {
+	//	return -1; 
+	//}
+	if (argint(1, &len) < 0) {
 		return -1; 
 	}
+	cprintf("addr is %d, len is %d\n", addr, len); 
 	return kern_mprotect((void *)addr, len);
 }
 
@@ -109,8 +112,10 @@ int sys_munprotect(void) {
 	if (argint(0, &addr) < 0) {
 		return -1;
 	}
-	addr = proc->sz; 
-	if (argint(0, &len) < 0) {
+	//if (argptr(0, (char **) &addr, 4) < 0) {
+	//	return -1; 
+	//}
+	if (argint(1, &len) < 0) {
 		return -1; 
 	}
 	return kern_munprotect((void *)addr, len);

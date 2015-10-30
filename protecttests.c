@@ -30,13 +30,17 @@ main(int argc, char *argv[])
 
   // should fail for address zero, which shouldn't be mapped in
   // the process any more because of part a of project
+  printf(1, "Let's go!\n"); 
   assert(mprotect(0, 1) == -1);
   assert(munprotect(0, 1) == -1);
+  printf(1, "This better fail.\n"); 
 
   printf(1, "starting address is %d\n", (uint)start);
-
+  
+  printf(1, "Let's see if this works.\n");
   assert(mprotect(start, 1) == -1);
   assert(munprotect(start, 1) == -1);
+  printf(1, "Yes. It works.\n"); 
 
   sbrk(PGSIZE * 1);
   assert(mprotect(start, 2) == -1);
@@ -51,13 +55,17 @@ main(int argc, char *argv[])
   assert(mprotect(start, -2) == -1);
   assert(munprotect(start, -2) == -1);
 
+  printf(1, "Here we are at line 58! Hopefully, this will work!\n");
   assert(mprotect(start, 1) == 0);
   assert(munprotect(start, 1) == 0);
+  printf(1, "YES!\n");
 
   // protect page again to check that permissions
   // carry over on fork
+  printf(1, "Alright, going to fork!\n"); 
   assert(mprotect(start, 1) == 0);
   int rv = fork();
+  printf(1, "Let's see what rv is: %d\n", rv); 
   if (rv < 0) {
     printf(1, "Fork failed.  Oops.  This shouldn't happen, right?!\n");
   } else if (rv == 0) {
@@ -67,10 +75,11 @@ main(int argc, char *argv[])
     printf(1, "TEST FAILED (if you got here, child didn't crash)\n");
     exit();
   } else {
+	printf(1, "HEY, IT SHOULD BE THIS, RIGHT? (if rv > 0)\n"); 
     assert(munprotect(start, 1) == 0);
     wait();
   }
-
+	
    printf(1, "TEST PASSED\n");
 
    exit();
