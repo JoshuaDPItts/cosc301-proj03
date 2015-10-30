@@ -468,10 +468,22 @@ procdump(void)
 }
 
 int kern_mprotect(void *addr, int len) {
+	if ((int)addr%PGSIZE != 0 || ) {
+		return -1; 
+	}
+	if (len <= 0 || len > proc->sz) {
+		return -1; 
+	}
 	return 0;
 }
 
 int kern_munprotect(void *addr, int len) {
+	if ((int)addr%PGSIZE != 0) {
+		return -1; 
+	}
+	if (len <= 0 || len > proc->sz) {
+		return -1; 
+	}
 	return 0;
 }
 
